@@ -1,0 +1,22 @@
+player 1 vs player 2
+
+# Step 1: Find Player 1's expected score. Take their rating at the time of the game and add $BETA (currently -550). Do the same for Player 2, and the ratio of P1/P2 gives P1's expected score. If it's below 2 somehow, just set it to 2.
+expected_score = [((player1.old_rating + $BETA) / (player2.old_rating + $BETA) * player2.score), 2].max
+
+
+##### Rating change (not accounting for provisional stuff yet)
+
+# Step 2: Find the lower of (expected score / actual score) or the inverse, then subtract 1. Selecting the minimum of these ensures that both players will go up/down by the same amount of points. One could also choose the max, but that also tends to make the rating changes very large.
+rating_change = [(player1.score/player1.expected_score), (player1.expected_score/player1.score)].min - 1
+
+# Step 3: Multiply the lower of from step 2 by -1 if Player 1 beat their expectations. A bit counter-intuitive, but the rating_change value will be negative if they, in fact, overperformed.
+if player1.score > player1.expected_score
+    rating_change = -rating_change
+
+# Step 4: Multiply rating_change by $REGK (currently 25), to give a more substantial volume to the change.
+rating_change = rating_change * $REGK
+
+# Step 5: Add or subtract $WINLOSS (currently 5) to rating_change if Player 1 just plain did better or worse than Player 2. This ensures that the "winner" of the head-to-head gets at least something, even if they don't manage to meet/beat their expected score.
+if player1.score > player2.score
+    rating_change += $WINLOSS
+    
