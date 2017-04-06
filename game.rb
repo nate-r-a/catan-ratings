@@ -8,6 +8,7 @@ $BETA =     -550
 $REGK =     25
 $PROVK =    25
 $WINLOSS =  5
+$OPPPROV =  1
 
 al = Player.new("Al")
 bob = Player.new("Bob")
@@ -16,7 +17,7 @@ dan = Player.new("Dan")
 
 class Game
     
-    attr_accessor :id, :date, :players, :scores, :old_ratings, :dice_rolls, :layout
+    attr_accessor :id, :date, :players, :scores, :old_ratings, :new_ratings, :dice_rolls, :layout
     
     def initialize(id, date, *players)
 
@@ -73,8 +74,10 @@ class Game
     def calc_ratings
         # Changes players' ratings
         x = 1
-        @players[0...-1].each do |player| # Stops before last player
+        @players.each do |player|
             puts "Starting calcs for #{player.name}"
+            player.scores[self.id] = @scores[player]
+            puts "#{player.name}'s score added to personal score list"
             
             if player.provisional == true
                 if @scores[player] == 10
@@ -85,13 +88,16 @@ class Game
                     puts "#{player.name} lost this provisional game."
                     proportion = @scores[player].to_f / (self.sum_scores - 10)
                     puts "Proportion: #{proportion}"
-                    # The -2 * $PROVK part essentially inverses a player's
+                    # The (-2 * $PROVK) part essentially inverses a player's
                     # rating_change. Higher proportion -> lower rating loss.
                     rating_change = (-2 * $PROVK) + (proportion * ($PROVK * (players.length - 1)))
                     puts "Rating change: #{rating_change}"
                     player.rating += rating_change
                 end
-            else    
+            else
+                if player == @players[-1]
+                    break
+                end
                 @players[x..-1].each do |opponent| # Compares to each following player in array
                     puts "versus #{opponent.name}"
                     expected_score = [((@old_ratings[player] + $BETA) / (@old_ratings[opponent] + $BETA) * @scores[opponent]), 2].max
@@ -113,19 +119,20 @@ class Game
                     end
                 end
             end
-            
             x += 1
-        
-        
-            for player in players
-                @new_ratings[player] = player.rating
-            end
-        end
+            
 
-    
-    
-    
+        end
+        
+        for player in players
+            @new_ratings[player] = player.rating
+            puts "Added #{player.name} to @new_ratings"
+            player.old_rating = player.rating
+            puts "old_rating set equal to rating in preparation for future games"
+        end
+        return @new_ratings
     end
+    
 end
 
 game1 = Game.new(1, "1/1/16", al, bob, carl, dan)

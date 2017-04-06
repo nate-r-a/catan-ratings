@@ -1,4 +1,13 @@
-player 1 vs player 2
+player vs opponent
+
+# Step 0: Determine if Player 1 is provisional, adjust course of ratings change accordingly.
+if player.provisional == true
+    
+    if player.score == 10
+        puts "#{player.name} won this provisional game
+        rating_change = 25 * (player.length - 1)
+    else
+        rating_change = -25 * play
 
 # Step 1: Find Player 1's expected score. Take their rating at the time of the game and add $BETA (currently -550). Do the same for Player 2, and the ratio of P1/P2 gives P1's expected score. If it's below 2 somehow, just set it to 2.
 expected_score = [((player1.old_rating + $BETA) / (player2.old_rating + $BETA) * player2.score), 2].max

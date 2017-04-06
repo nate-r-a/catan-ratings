@@ -2,7 +2,7 @@ require "pry"
 
 
 class Player
-    attr_accessor :pref_color, :old_rating, :rating, :games_played, :provisional
+    attr_accessor :pref_color, :old_rating, :rating, :games_played, :provisional, :scores
     
     attr_reader :name
     
@@ -12,8 +12,8 @@ class Player
         @rating = 1000.0
         @games_played = 0
         @provisional = true
-        # Array of scores
-        @scores = []
+        # Hash of scores from games played
+        @scores = {}
         
         # Adds self to global list of Player objects
         $player_list.push(self)
