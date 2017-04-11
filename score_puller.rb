@@ -43,6 +43,17 @@ game = {}
   scores << game
 end
 
-File.open("scores.json", "w") do |f|
-  f.write(scores.to_json)
+scores.each do |game|
+  puts game[:number]
+  puts game
+  puts "game[:players] = #{game[:players].class} #{game[:players]}"
+  game[:players].each do |gameplay|
+    puts gameplay[1][:name]
+    puts gameplay[1][:score]
+  end
 end
+
+# Pushes data to json file
+# File.open("scores.json", "w") do |f|
+#   f.write(scores.to_json)
+# end
