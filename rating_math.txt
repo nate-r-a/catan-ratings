@@ -5,7 +5,7 @@ if player.provisional == true
     
     if player.score == 10
         puts "#{player.name} won this provisional game
-        rating_change = 25 * (player.length - 1)
+        rating_change = 25 * (players.length - 1)
     else
         rating_change = -25 * play
 
