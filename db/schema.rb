@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412050258) do
+ActiveRecord::Schema.define(version: 20170413065735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20170412050258) do
     t.integer  "player_id"
     t.integer  "game_id"
     t.date     "date"
+    t.float    "before"
+    t.float    "after"
     t.index ["game_id"], name: "index_gameplays_on_game_id", using: :btree
     t.index ["player_id"], name: "index_gameplays_on_player_id", using: :btree
   end
@@ -37,7 +39,6 @@ ActiveRecord::Schema.define(version: 20170412050258) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal  "rating"
   end
 
   add_foreign_key "gameplays", "games"

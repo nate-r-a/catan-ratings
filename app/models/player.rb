@@ -1,9 +1,15 @@
 class Player < ApplicationRecord
   has_many :gameplays
-  after_initialize :init
+  # after_initialize :init
   
-  def init
-    self.rating ||= 1000.00
+  def rating
+    self.gameplays.last.after
+  end
+  def games
+    arr = []
+    self.gameplays.each do |gp|
+      arr << gp.game.number
+    end
   end
   
   def wins
@@ -42,4 +48,5 @@ class Player < ApplicationRecord
     # in_games = Gameplay.joins(:game).where(gameplays: {player: self})
     other_scores = Gameplay.where(game: in_games).where.not(player: self).average(:score)
   end
+  
 end
