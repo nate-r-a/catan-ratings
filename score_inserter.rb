@@ -22,10 +22,11 @@ h.each do |game|
     end
     pl = Player.where(name: gameplay[1][:name]).first_or_create
     g = Gameplay.create(score: gameplay[1][:score], position: pos, player: pl, game: @newgame)
-    
+    pos += 1
     
     puts "game # #{game[:number]}"
     puts gameplay[1][:name]
+    puts "position: #{gameplay[1][:position]}"
     puts gameplay[1][:score]
   end
 end

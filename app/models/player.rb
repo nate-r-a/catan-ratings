@@ -5,6 +5,7 @@ class Player < ApplicationRecord
   def rating
     self.gameplays.last.after
   end
+  
   def games
     arr = []
     self.gameplays.each do |gp|

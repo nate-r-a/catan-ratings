@@ -8,12 +8,15 @@ default: &default
 
 development:
   <<: *default
+  template: template0
   database: catan_development
 
 test:
   <<: *default
+  template: template0
   database: app_test
 
 production:
   <<: *default
+  template: template0
   database: app_production
