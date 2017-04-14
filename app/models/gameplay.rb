@@ -10,24 +10,29 @@ class Gameplay < ApplicationRecord
   
   def calc_prov_win
     provk = 25
-    puts "Provisional pre-.after rating: #{self.after}, gameplay id = #{self.id}"
+    puts "Provisional game for #{self.player.name}, gameplay id = #{self.id}"
     if self.score == 10
       puts "#{self.player.name} won this provisional game (##{self.game.number})"
       self.after += ((self.game.gameplays.count-1) * provk)
+      self.save
     else
       puts "#{self.player.name} lost this provisional game (##{self.game.number})"
+      puts "sum = #{self.game.gameplays.sum(:score)}"
       prop = self.score / (self.game.gameplays.sum(:score)-10)
-      rc = (-2*provk) + (prop * (provk * self.game.gameplays.count-1))
-      
+      puts "prop: #{prop}"
+      rc = (-2*provk) + (prop * (provk * (self.game.gameplays.count-1)))
+      puts "rc = #{rc}"
       # rc should be negative
       self.after += rc
+      self.save
     end
+    puts self.after
   end
         
       
       
       
-  def h2h(opp)
+  def h2h(opp, opp_prov)
     beta =    -550
     regk =    25
     wl =      5
@@ -35,14 +40,19 @@ class Gameplay < ApplicationRecord
     
     puts "Game #{self.game.number}: #{self.player.name} vs #{opp.player.name}"
     
-    if opp.player.provisional?
+    if opp_prov
+      puts "#{opp.player.name} is provisional"
       if self.score > opp.score
         self.after += (oppprov * self.game.player_count)
+        puts self.after
         self.save
         return
       elsif self.score < opp.score
         self.after -= (oppprov * self.game.player_count)
+        puts self.after
         self.save
+        return
+      else # tie with provisional opp
         return
       end
     end

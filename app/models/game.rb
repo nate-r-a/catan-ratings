@@ -32,7 +32,7 @@ class Game < ApplicationRecord
     # byebug
     
     # games = Game.all.sort_by(&:number)
-    games = Game.first(3)
+    games = Game.first(12)
     games.each do |game|
       puts "Starting calcs for game ##{game.number}"
       
@@ -40,18 +40,18 @@ class Game < ApplicationRecord
       game.gameplays.each do |gp|
         puts "Game ##{game.number}, Player: #{gp.player.name}"
         arr = gp.player.games
-        puts arr.join(' ')
+        # puts arr.join(' ')
         i = arr.index(gp.game.number)
-        puts i
+        # puts i
         
         if !(gp.game.number == arr[0])
-          puts "NOT SKIPPED"
+          # puts "NOT SKIPPED"
           # Will skip if it's the first game
-          puts gp.player.gameplays.find_by(game: arr[i-1]).after
+          # puts gp.player.gameplays.find_by(game: arr[i-1]).after
           gp.before = gp.player.gameplays.find_by(game: arr[i-1]).after
           
           gp.save
-          puts "saved? #{gp.player.gameplays.find_by(game: arr[i-1]).after}"
+          puts ".before saved? #{gp.player.gameplays.find_by(game: arr[i-1]).after}"
         end
         
         gp.after = gp.before
@@ -62,17 +62,27 @@ class Game < ApplicationRecord
       end
       puts "All afters in gameplays for game #{game.number} set"
       
-      game.gameplays.each do |gp|
+      game.gameplays.sort_by(&:position).each do |gp|
         if gp.player.provisional?
           gp.calc_prov_win
           gp.save
           next
         else
-          unless gp.position == game.player_count
-            gp.game.gameplays.where("position > ?", gp.position).each do |opp|
-              gp.h2h(opp)
+          # unless gp.position == game.player_count
+          puts "Starting h2h's for #{gp.player.name}"
+          # gp.game.gameplays.where("position > ?", gp.position).each do |opp|
+          #   gp.h2h(opp)
+          # end
+          gp.game.gameplays.each do |opp|
+            if opp.position > gp.position
+              gp.h2h(opp, false)
+            elsif opp.player.provisional?
+              gp.h2h(opp, true)
             end
           end
+          
+          
+          # end
         end
         
       end
