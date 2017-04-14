@@ -11,6 +11,7 @@ class Player < ApplicationRecord
     self.gameplays.each do |gp|
       arr << gp.game.number
     end
+    return arr.sort
   end
   
   def wins
@@ -22,7 +23,7 @@ class Player < ApplicationRecord
   end
   
   def provisional?
-    self.gameplays.count < 4
+    self.gameplays[4].nil? || self.gameplays[4].after.nil?
   end
   
   def close_games
