@@ -56,10 +56,13 @@ class Gameplay < ApplicationRecord
         return
       end
     end
-    
+    puts "NOT PROVISONAL <<<<<<<<<<<<<<<<"
     exp_score = [((self.before + beta) / (opp.before + beta) * opp.score), 2].max
+    puts "Exp score: #{exp_score}, "
     score_prop = [(self.score / exp_score), (exp_score / self.score)].min - 1
+    print "Score prop: #{score_prop}"
     rc = score_prop * regk
+    puts ", rc: #{rc}"
     
     # Win/loss ------
     if self.score > opp.score

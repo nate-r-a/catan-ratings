@@ -12,9 +12,10 @@ class Game < ApplicationRecord
   # Recalculates ratings for ALL games
   def self.recalculate_ratings
     puts "Starting recalculations...."
-    
+    # byebug
     # Reset everyone's ratings
     Gameplay.all.each do |gp|
+      # puts "Setting gameplays............."
       gp.before = nil
       gp.after = nil
       gp.save
@@ -22,12 +23,16 @@ class Game < ApplicationRecord
     puts "Gameplay ratings reset (0)"
     
     Player.all.each do |pl|
+      # puts "Resetting scores and games <<<<<<<<<<<<<<<"
       gp = pl.gameplays.first
       gp.before = 1000
       gp.save
-      puts pl.gameplays.first.before
+      # puts pl.gameplays.first.before
+      pl.reset_games
+      # byebug
+      puts "#{pl.name} GP = #{pl.games_played}"
     end
-    puts "First gameplay ratings (.before) set (1000)"
+    puts "First gameplay ratings (.before) set (1000); game_played set to 0"
     
     # byebug
     
@@ -63,21 +68,27 @@ class Game < ApplicationRecord
       puts "All afters in gameplays for game #{game.number} set"
       
       game.gameplays.sort_by(&:position).each do |gp|
+        puts "Starting h2h's for #{gp.player.name}"
         if gp.player.provisional?
+          puts "#{gp.player.name} is provisional"
           gp.calc_prov_win
           gp.save
           next
         else
           # unless gp.position == game.player_count
-          puts "Starting h2h's for #{gp.player.name}"
+          
           # gp.game.gameplays.where("position > ?", gp.position).each do |opp|
           #   gp.h2h(opp)
           # end
+          
+          # TODO: MAKE SURE EVERONE IS COMPARED, PROVISIONAL OR OTHERWISE
           gp.game.gameplays.each do |opp|
             if opp.position > gp.position
-              gp.h2h(opp, false)
-            elsif opp.player.provisional?
-              gp.h2h(opp, true)
+              if opp.player.provisional?
+                gp.h2h(opp, true)
+              else
+                gp.h2h(opp, false)
+              end
             end
           end
           
@@ -89,6 +100,9 @@ class Game < ApplicationRecord
       
       game.gameplays.each do |gp|
         puts "#{gp.player.name}: #{gp.before} -> #{gp.after}"
+        pl = gp.player
+        pl.games_played += 1
+        pl.save
       end
     end
   end

@@ -2,6 +2,11 @@ class Player < ApplicationRecord
   has_many :gameplays
   # after_initialize :init
   
+  def reset_games
+    self.games_played = 0
+    self.save
+  end
+  
   def rating
     self.gameplays.last.after
   end
@@ -23,7 +28,7 @@ class Player < ApplicationRecord
   end
   
   def provisional?
-    self.gameplays[4].nil? || self.gameplays[4].after.nil?
+    self.games_played < 5
   end
   
   def close_games
