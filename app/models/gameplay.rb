@@ -33,7 +33,7 @@ class Gameplay < ApplicationRecord
       
       
   def h2h(opp, opp_prov)
-    beta =    -550
+    beta =    -500
     regk =    25
     wl =      5
     oppprov = 1
@@ -44,12 +44,12 @@ class Gameplay < ApplicationRecord
       puts "#{opp.player.name} is provisional"
       if self.score > opp.score
         self.after += (oppprov * self.game.player_count)
-        puts self.after
+        puts "opp_prov rc: +#{oppprov * self.game.player_count}"
         self.save
         return
       elsif self.score < opp.score
         self.after -= (oppprov * self.game.player_count)
-        puts self.after
+        puts "opp_prov rc: -#{oppprov * self.game.player_count}"
         self.save
         return
       else # tie with provisional opp
@@ -57,6 +57,8 @@ class Gameplay < ApplicationRecord
       end
     end
     puts "NOT PROVISONAL <<<<<<<<<<<<<<<<"
+    puts "self.before+beta = #{(self.before + beta)}"
+    puts "opp.before+beta = #{(opp.before + beta)}"
     exp_score = [((self.before + beta) / (opp.before + beta) * opp.score), 2].max
     puts "Exp score: #{exp_score}, "
     score_prop = [(self.score / exp_score), (exp_score / self.score)].min - 1
@@ -67,23 +69,24 @@ class Gameplay < ApplicationRecord
     # Win/loss ------
     if self.score > opp.score
       self.after += wl
-      opp.after  -= wl
     elsif self.score < opp.score
       self.after -= wl
-      opp.after  += wl
     end
     
-    # Score comparisons ------
-    exp_score = [((self.before + beta) / (opp.before + beta) * opp.score), 2].max
-    score_prop = [(self.score / exp_score), (exp_score / self.score)].min - 1
-    rc = score_prop * regk
+    # # Score comparisons ------
+    # exp_score = [( (self.before + beta) / (opp.before + beta) * opp.score), 2].max
+    # score_prop = [(self.score / exp_score), (exp_score / self.score)].min - 1
+    # rc = score_prop * regk
     
     if self.score > exp_score
-      self.after  += rc
-      opp.after   -= rc
-    elsif self.score < exp_score
+      puts "#{self.player.name} beat the exp_score"
+      puts "Before: #{self.before}"
+      
       self.after  -= rc
-      opp.after   += rc 
+      puts "After : #{self.after}"
+    elsif self.score < exp_score
+    puts "#{self.player.name} did not beat the exp_score"
+      self.after  += rc
     end
     
     self.save

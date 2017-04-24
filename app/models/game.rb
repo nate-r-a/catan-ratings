@@ -37,7 +37,7 @@ class Game < ApplicationRecord
     # byebug
     
     # games = Game.all.sort_by(&:number)
-    games = Game.first(12)
+    games = Game.all #first(10)
     games.each do |game|
       puts "Starting calcs for game ##{game.number}"
       
@@ -81,14 +81,12 @@ class Game < ApplicationRecord
           #   gp.h2h(opp)
           # end
           
-          # TODO: MAKE SURE EVERONE IS COMPARED, PROVISIONAL OR OTHERWISE
+          # TODO: Currently compares the player to him/herself, works but not the cleanest
           gp.game.gameplays.each do |opp|
-            if opp.position > gp.position
-              if opp.player.provisional?
-                gp.h2h(opp, true)
-              else
-                gp.h2h(opp, false)
-              end
+            if opp.player.provisional?
+              gp.h2h(opp, true)
+            else
+              gp.h2h(opp, false)
             end
           end
           
