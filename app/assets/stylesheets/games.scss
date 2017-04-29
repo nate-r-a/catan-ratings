@@ -3,7 +3,31 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .avatar {
-  height: 100px;
-  width: 100px;
+  height: 55px;
+  width: 55px;
   border: 2px solid black;
+  float: left;
+}
+
+.avatar-name {
+  float: right;
+  padding: 5px 0 5px 10px;
+  font-size: 45px;
+}
+
+// .scorecard {
+//   height: 65px;
+// }
+
+.scorecard a {
+  vertical-align: middle;
+  color: #363636;
+}
+
+.scorecard h1 {
+  margin: 0;
+}
+
+.panel {
+  margin-bottom: 10px;
 }

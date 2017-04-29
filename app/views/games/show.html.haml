@@ -1,13 +1,14 @@
 .col-md-6
   - @game.gameplays.each do |gp|
-    .panel.panel-default
-      .panel-heading
-        .row
-          .col-md-9
-            .pull-left
-              %h1
+    %a{:href => player_path(gp.player.name.downcase)}
+      .panel.panel-default.scorecard
+        .panel-heading
+          .row
+            .col-md-9
+              .pull-left
                 = image_tag "sheep.png", class: "avatar"
-                = link_to gp.player.name, player_path(gp.player)
-          .col-md-3  
-            .pull-right
-              = gp.score.round(0)
+                %h1.avatar-name
+                  = gp.player.name
+            .col-md-3  
+              .pull-right
+                = gp.score.round(0)
