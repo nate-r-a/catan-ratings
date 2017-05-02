@@ -1,26 +1,26 @@
-
-%nav.navbar.navbar-default.navbar-static-top
-  // .container-fluid
-  // .col-md-6.col-md-offset-3
-  .navbar-header
-    %a.navbar-brand.logo{:href => "/"}
-      = ["🐑","🌲","🌾","⛰️","🎲"].sample
-    %a.navbar-brand.logo-text{:href => "/"}
-      Federation Catan
-  %ul.nav.navbar-nav
-    %li.active
-      %a{:href => "#"}
-        = "Game #{params[:number]}"
-    %li.dropdown
-      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-        Players
-        %span.caret
-      %ul.dropdown-menu{:role => "menu"}
-        - Player.all.order(:name).each do |p|
-          %li= link_to p.name, player_path(p.name.downcase)
-          %li.divider
-    = form_tag search_path, :class => "navbar-form navbar-left", :method => :get do
-      = text_field_tag :number, nil, :class => "form-control", :placeholder => "Game #"
-    - unless flash[:alert].blank?
-      %li.alert.alert-danger
-        = flash[:alert]
+%nav.navbar.navbar-default
+  .container
+    .row.nav-row
+      // .col-md-6.col-md-offset-3
+      // .navbar-header
+      %a.navbar-brand.logo{:href => "/"}
+        = ["🐑","🌲","🌾","⛰️","🎲"].sample
+      %a.navbar-brand.logo-text{:href => "/"}
+        Federation Catan
+      %ul.nav.navbar-nav
+        %li.active
+          %a{:href => "#"}
+            = "Game #{params[:number]}"
+        %li.dropdown
+          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            Players
+            %i.fa.fa-caret-down
+          %ul.dropdown-menu{:role => "menu"}
+            - Player.all.order(:name).each do |p|
+              %li= link_to p.name, player_path(p.name.downcase)
+              %li.divider
+        = form_tag search_path, :class => "navbar-form navbar-left", :method => :get do
+          = text_field_tag :number, nil, :class => "form-control", :placeholder => "Game #"
+        - unless flash[:alert].blank?
+          %li.alert.alert-danger
+            = flash[:alert]

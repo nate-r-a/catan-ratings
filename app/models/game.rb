@@ -36,8 +36,8 @@ class Game < ApplicationRecord
     
     # byebug
     
-    # games = Game.all.sort_by(&:number)
-    games = Game.all #first(10)
+    games = Game.all.sort_by(&:number)
+    # games = Game.all #first(10)
     games.each do |game|
       puts "Starting calcs for game ##{game.number}"
       
