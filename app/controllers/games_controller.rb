@@ -8,7 +8,8 @@ class GamesController < ApplicationController
     if Game.exists?(number: search_term)
       redirect_to "/games/#{search_term}"
     else
-      flash[:alert] = "That game doesn't exist!"
+      flash[:alert] = "Game #{params[:number]} doesn't exist!"
+      redirect_to :back
     end
   end
   

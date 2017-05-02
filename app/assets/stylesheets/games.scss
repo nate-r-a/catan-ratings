@@ -9,15 +9,11 @@
   float: left;
 }
 
-.avatar-name {
+.avatar-name, .score {
   float: right;
-  padding: 5px 0 5px 10px;
+  padding: 5px 0 3px 10px;
   font-size: 45px;
 }
-
-// .scorecard {
-//   height: 65px;
-// }
 
 .scorecard a {
   vertical-align: middle;
@@ -30,4 +26,5 @@
 
 .panel {
   margin-bottom: 10px;
+  box-shadow: 2px 2px 5px grey;
 }

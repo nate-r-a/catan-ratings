@@ -1,5 +1,5 @@
 class PlayersController < ApplicationController
   def show
-    @player = Player.find_by(name: params[:name].capitalize)
+    @player = Player.where("LOWER(name) = ?", params[:name].downcase).first
   end
 end
