@@ -1,15 +1,32 @@
-.row
-  .col-md-6.col-md-offset-3
+.container
+  .row
     - @game.gameplays.each do |gp|
-      %a{:href => player_path(gp.player.name.downcase)}
-        .panel.panel-default.scorecard
-          .panel-heading
-            .row
-              .col-md-9
-                .pull-left
-                  = image_tag "sheep.png", class: "avatar"
-                  %h1.avatar-name
-                    = gp.player.name
-              .col-md-3  
-                %h1.score.pull-right
-                  = gp.score.round(0)
+      .col-md-4.col-sm-4.col-xs-6
+        .player-score
+          = image_tag "sheep.png", class: "player-avatar"
+          //.player-name
+          %span.player-name
+            = gp.player.name
+            = gp.score.round(0)
+            %p
+              #{gp.before.round(0)} 
+              %i.fa.fa-arrow-right.arrow{data: {diff: (gp.after - gp.before)}}
+              #{gp.after.round(0)}
+                
+                
+-#
+  - (@game.player_count/3).times do |i|
+    .row
+      - @game.gameplays.first(3).each do |gp|
+        .col-md-4.col-sm-4.col-xs-4
+          .player-score
+            = image_tag "sheep.png", class: "player-avatar"
+            %span.player-name
+              = gp.player.name
+              = gp.score.round(0)
+              %p
+                #{gp.before.round(0)} → #{gp.after.round(0)}
+                %i.fa.fa-arrow-right.arrow{data: {diff: (gp.after - gp.before)}}
+  
+
+// = javascript_include_tag 'games.js'

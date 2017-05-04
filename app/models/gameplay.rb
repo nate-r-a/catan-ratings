@@ -8,6 +8,30 @@ class Gameplay < ApplicationRecord
   #   self.before = self.player.gameplays.where("gameplays.game_id < ?", self.game.number) || 1000
   # end
   
+  def self.non_provisional
+    Gameplay.all.reject { |gp| gp.provisional? }
+  end
+  
+  def provisional?
+    self.player.games[0..5].include? self.game.number
+  end
+  
+  def change
+    self.after - self.before
+  end
+  
+  def self.biggest_change(num=1,type="abs")
+    case type
+    when "abs"
+      non_provisional.max_by(num) { |gp| gp.change.abs }
+    when "loss"
+      non_provisional.min_by(num) { |gp| gp.change }
+    when "gain"
+      non_provisional.max_by(num) { |gp| gp.change }
+    end
+  end
+  
+  
   def calc_prov_win
     provk = 25
     puts "Provisional game for #{self.player.name}, gameplay id = #{self.id}"

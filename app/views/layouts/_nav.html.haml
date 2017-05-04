@@ -20,7 +20,7 @@
               %li= link_to p.name, player_path(p.name.downcase)
               %li.divider
         = form_tag search_path, :class => "navbar-form navbar-left", :method => :get do
-          = text_field_tag :number, nil, :class => "form-control", :placeholder => "Game #"
+          = text_field_tag :number, nil, class: "form-control", placeholder: "Game #", autocomplete: "off"
         - unless flash[:alert].blank?
           %li.alert.alert-danger
             = flash[:alert]

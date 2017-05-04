@@ -8,7 +8,7 @@ class Player < ApplicationRecord
   end
   
   def rating
-    self.gameplays.last.after
+    self.gameplays.last.after.round(0)
   end
   
   def games

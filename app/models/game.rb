@@ -9,6 +9,13 @@ class Game < ApplicationRecord
     self.gameplays.count
   end
   
+  def report
+    puts "Game ##{self.number}:"
+    self.gameplays.each do |gp|
+      puts "#{gp.player.name}-#{gp.score.round(0)} (#{gp.before.round(0)} -> #{gp.after.round(0)})"
+    end
+  end
+  
   # Recalculates ratings for ALL games
   def self.recalculate_ratings
     puts "Starting recalculations...."
